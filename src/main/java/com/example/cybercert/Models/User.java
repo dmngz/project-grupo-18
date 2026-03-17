@@ -1,6 +1,8 @@
 package com.example.cybercert.Models;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import com.example.cybercert.Role;
 
@@ -30,6 +32,22 @@ public class User {
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Comment> comments;
+
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+        name = "user_cart",
+        joinColumns = @JoinColumn(name = "user_id"),
+        inverseJoinColumns = @JoinColumn(name = "certification_id")
+    )
+    private Set<Certification> cartItems = new HashSet<>();
+
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+        name = "user_purchased",
+        joinColumns = @JoinColumn(name = "user_id"),
+        inverseJoinColumns = @JoinColumn(name = "certification_id")
+    )
+    private Set<Certification> purchasedCertifications = new HashSet<>();
 
     public User() {}
 
@@ -79,5 +97,21 @@ public class User {
 
     public void setProfileImage(String profileImage) {
         this.profileImage = profileImage;
+    }
+
+    public Set<Certification> getCartItems() {
+        return cartItems;
+    }
+
+    public void setCartItems(Set<Certification> cartItems) {
+        this.cartItems = cartItems;
+    }
+
+    public Set<Certification> getPurchasedCertifications() {
+        return purchasedCertifications;
+    }
+
+    public void setPurchasedCertifications(Set<Certification> purchasedCertifications) {
+        this.purchasedCertifications = purchasedCertifications;
     }
 }

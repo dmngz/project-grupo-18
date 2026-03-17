@@ -17,14 +17,30 @@
                     <th class="text-neon">ID</th>
                     <th class="text-neon">Course</th>
                     <th class="text-neon">Price</th>
+                    <th class="text-neon">Action</th>
                   </tr>
                 </thead>
                 <tbody id="cart-body">
+                  {{#cartItems}}
                   <tr>
-                    <td class="text-neon">0</td>
-                    <td class="text-neon">Pentesting Certification</td>
-                    <td class="text-neon">89.99$</td>
+                    <td class="text-neon">{{id}}</td>
+                    <td class="text-neon">
+                      <a href="/certification/{{id}}" class="text-neon">{{name}}</a>
+                    </td>
+                    <td class="text-neon">${{formattedPrice}}</td>
+                    <td>
+                      <form method="post" action="/cart/remove/{{id}}">
+                        <input type="hidden" name="_csrf" value="{{token}}" />
+                        <button type="submit" class="btn btn-sm btn-danger">Remove</button>
+                      </form>
+                    </td>
                   </tr>
+                  {{/cartItems}}
+                  {{^hasItems}}
+                  <tr>
+                    <td colspan="4" class="text-center text-neon">Your cart is empty.</td>
+                  </tr>
+                  {{/hasItems}}
                 </tbody>
               </table>
             </div>
@@ -40,7 +56,7 @@
                 class="list-group-item bg-transparent text-neon d-flex justify-content-between align-items-center"
               >
                 Subtotal
-                <span id="summary-subtotal" class="text-neon">$0.00</span>
+                <span id="summary-subtotal" class="text-neon">${{cartTotal}}</span>
               </li>
               <li
                 class="list-group-item bg-transparent text-neon d-flex justify-content-between align-items-center"
@@ -52,7 +68,7 @@
                 class="list-group-item bg-transparent text-neon d-flex justify-content-between align-items-center fw-bold"
               >
                 Total
-                <span id="summary-total" class="text-neon">$0.00</span>
+                <span id="summary-total" class="text-neon">${{cartTotal}}</span>
               </li>
             </ul>
             <a

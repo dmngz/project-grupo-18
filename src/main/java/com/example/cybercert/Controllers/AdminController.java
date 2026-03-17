@@ -137,6 +137,7 @@ public class AdminController {
             @RequestParam String description,
             @RequestParam String requirements,
             @RequestParam String contents,
+            @RequestParam double price,
             @RequestParam("imageFile") MultipartFile imageFile) throws IOException {
 
         if (imageFile != null && !imageFile.isEmpty()) {
@@ -160,6 +161,7 @@ public class AdminController {
                 contList,
                 "assets/img/" + imageFile.getOriginalFilename());
 
+        cert.setPrice(price);
         certificationService.save(cert);
 
         return "redirect:/admin";

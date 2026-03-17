@@ -72,6 +72,12 @@ public class CertificationController {
 
             if (user != null) {
                 model.addAttribute("isAdmin", user.getRole() == Role.ADMIN);
+                boolean inCart = user.getCartItems().stream()
+                        .anyMatch(c -> c.getId().equals(id));
+                boolean isPurchased = user.getPurchasedCertifications().stream()
+                        .anyMatch(c -> c.getId().equals(id));
+                model.addAttribute("inCart", inCart);
+                model.addAttribute("isPurchased", isPurchased);
             }
         }
 

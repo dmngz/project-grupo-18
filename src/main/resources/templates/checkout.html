@@ -2,7 +2,12 @@
 
 <main class="flex-fill">
   <section class="checkout-section">
-    <form class="payment-form">
+    <div class="order-summary mb-4">
+      <h3>Order Summary</h3>
+      <p class="text-neon fw-bold">Total: ${{cartTotal}}</p>
+    </div>
+    <form class="payment-form" method="post" action="/checkout/confirm">
+      <input type="hidden" name="_csrf" value="{{token}}" />
       <div id="card-details">
         <h3>Datos de la tarjeta</h3>
         <label for="card-number">Número de tarjeta</label>
