@@ -2,7 +2,7 @@ package com.example.cybercert.dto;
 
 import org.mapstruct.Mapper;
 
-import com.example.cybercert.Models.Image;
+import com.example.cybercert.models.Image;
 
 @Mapper(componentModel = "spring")
 public interface ImageMapper {
