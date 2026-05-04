@@ -5,7 +5,7 @@ import java.util.List;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
-import com.example.cybercert.Models.Certification;
+import com.example.cybercert.models.Certification;
 
 @Mapper(componentModel = "spring", uses = { ImageMapper.class })
 public interface CertificationMapper {

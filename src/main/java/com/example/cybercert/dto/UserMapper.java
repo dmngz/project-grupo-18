@@ -5,7 +5,7 @@ import java.util.List;
 
 import org.mapstruct.Mapper;
 
-import com.example.cybercert.Models.User;
+import com.example.cybercert.models.User;
 
 @Mapper(componentModel = "spring")
 public interface UserMapper {

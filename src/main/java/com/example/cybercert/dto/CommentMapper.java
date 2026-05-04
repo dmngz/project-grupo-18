@@ -5,7 +5,7 @@ import java.util.List;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
-import com.example.cybercert.Models.Comment;
+import com.example.cybercert.models.Comment;
 
 @Mapper(componentModel = "spring")
 public interface CommentMapper {
