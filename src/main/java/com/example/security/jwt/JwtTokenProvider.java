@@ -60,6 +60,15 @@ public class JwtTokenProvider {
 		return validateToken(token);
 	}
 
+	public Claims validateToken(HttpServletRequest req) {
+		String bearerToken = req.getHeader(HttpHeaders.AUTHORIZATION);
+		if (bearerToken != null) {
+			return validateToken(tokenStringFromHeaders(req));
+		}
+
+		return validateToken(tokenStringFromCookies(req));
+	}
+
 	public Claims validateToken(String token) {
 		return jwtParser.parseClaimsJws(token).getBody();
 	}

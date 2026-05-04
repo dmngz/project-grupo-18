@@ -2,8 +2,11 @@ package com.example.cybercert.services;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.example.cybercert.models.Certification;
@@ -25,10 +28,13 @@ public class ShoppingCartService {
 
     @Autowired
     private UserCertificationRepository userCertificationRepository;
+
+    @Transactional
     public List<UserCertification> findByUserIdOrderByPurchasedAtDesc(Long userId) {
         return userCertificationRepository.findByUserIdOrderByPurchasedAtDesc(userId);
     }
 
+    @Transactional
     public boolean hasPurchasedCertification(Long userId, Long certificationId) {
         if (userId == null || certificationId == null) {
             return false;
@@ -36,6 +42,7 @@ public class ShoppingCartService {
         return userCertificationRepository.existsByUserIdAndCertificationId(userId, certificationId);
     }
 
+    @Transactional
     public boolean isCertificationInCart(Long userId, Long certificationId) {
         if (userId == null || certificationId == null) {
             return false;
@@ -43,6 +50,25 @@ public class ShoppingCartService {
         return shoppingCartItemRepository.existsByUserIdAndCertificationId(userId, certificationId);
     }
 
+    @Transactional
+    public Optional<ShoppingCartItem> findCartItem(Long userId, Long certificationId) {
+        if (userId == null || certificationId == null) {
+            return Optional.empty();
+        }
+
+        return shoppingCartItemRepository.findByUserIdAndCertificationId(userId, certificationId);
+    }
+
+    @Transactional
+    public Page<ShoppingCartItem> getCartItemsPage(Long userId, Pageable pageable) {
+        if (userId == null) {
+            return Page.empty(pageable);
+        }
+
+        return shoppingCartItemRepository.findByUserId(userId, pageable);
+    }
+
+    @Transactional
     public List<Certification> getCartCertifications(Long userId) {
         List<Certification> certifications = new ArrayList<>();
         if (userId == null) {
@@ -58,8 +84,13 @@ public class ShoppingCartService {
         return certifications;
     }
 
+    @Transactional
     public int getVisibleCartSize(Long userId) {
-        return getCartCertifications(userId).size();
+        if (userId == null) {
+            return 0;
+        }
+
+        return Math.toIntExact(shoppingCartItemRepository.countByUserId(userId));
     }
 
     @Transactional

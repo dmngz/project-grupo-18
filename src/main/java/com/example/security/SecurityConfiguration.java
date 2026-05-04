@@ -115,6 +115,11 @@ public class SecurityConfiguration {
                 .requestMatchers("/certification/**").permitAll()
                 .requestMatchers("/swagger-ui.html", "/swagger-ui/**", "/v3/api-docs", "/v3/api-docs/**").permitAll()
 
+                // shopping cart API - authenticated users only
+                .requestMatchers(HttpMethod.GET, "/api/v1/shopping-cart/**", "/api/v1/shopping-carts/**").hasAnyRole("USER", "ADMIN")
+                .requestMatchers(HttpMethod.POST, "/api/v1/shopping-cart/**", "/api/v1/shopping-carts/**").hasAnyRole("USER", "ADMIN")
+                .requestMatchers(HttpMethod.DELETE, "/api/v1/shopping-cart/**", "/api/v1/shopping-carts/**").hasAnyRole("USER", "ADMIN")
+
                 // recursos estáticos
                 .requestMatchers("/css/**").permitAll()
                 .requestMatchers("/403", "/404", "/error").permitAll()
