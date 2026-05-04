@@ -81,6 +81,12 @@ public class SecurityConfiguration {
                         .requestMatchers(HttpMethod.POST, "/api/v1/comments").hasRole("USER")
                         .requestMatchers(HttpMethod.PUT, "/api/v1/comments/**").hasRole("USER")
                         .requestMatchers(HttpMethod.DELETE, "/api/v1/comments/**").hasRole("USER")
+
+                        // CART API - autenticado; el controlador limita el acceso al dueño del carrito
+                        .requestMatchers(HttpMethod.GET, "/api/v1/cart-items").hasAnyRole("USER", "ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/api/v1/cart-items/**").hasAnyRole("USER", "ADMIN")
+                        .requestMatchers(HttpMethod.POST, "/api/v1/cart-items").hasAnyRole("USER", "ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/api/v1/cart-items/**").hasAnyRole("USER", "ADMIN")
                         
                         // Resto de endpoints
                         .anyRequest().authenticated());

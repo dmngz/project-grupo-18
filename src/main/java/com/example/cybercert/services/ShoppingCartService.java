@@ -2,8 +2,11 @@ package com.example.cybercert.services;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.example.cybercert.models.Certification;
@@ -25,6 +28,7 @@ public class ShoppingCartService {
 
     @Autowired
     private UserCertificationRepository userCertificationRepository;
+
     public List<UserCertification> findByUserIdOrderByPurchasedAtDesc(Long userId) {
         return userCertificationRepository.findByUserIdOrderByPurchasedAtDesc(userId);
     }
@@ -62,22 +66,38 @@ public class ShoppingCartService {
         return getCartCertifications(userId).size();
     }
 
+    public Page<ShoppingCartItem> findCartItems(Long userId, Pageable pageable) {
+        if (userId == null) {
+            return Page.empty(pageable);
+        }
+
+        return shoppingCartItemRepository.findByUserId(userId, pageable);
+    }
+
+    public Optional<ShoppingCartItem> findCartItem(Long userId, Long cartItemId) {
+        if (userId == null || cartItemId == null) {
+            return Optional.empty();
+        }
+
+        return shoppingCartItemRepository.findByIdAndUserId(cartItemId, userId);
+    }
+
     @Transactional
-    public void addToCart(User user, Certification certification) {
+    public ShoppingCartItem addToCart(User user, Certification certification) {
         if (user == null || certification == null) {
-            return;
+            return null;
         }
 
         if (hasPurchasedCertification(user.getId(), certification.getId())) {
-            return;
+            return null;
         }
 
         if (isCertificationInCart(user.getId(), certification.getId())) {
-            return;
+            return null;
         }
 
         ShoppingCartItem item = new ShoppingCartItem(user, certification, CERTIFICATION_PRICE);
-        shoppingCartItemRepository.save(item);
+        return shoppingCartItemRepository.save(item);
     }
 
     @Transactional
@@ -86,6 +106,21 @@ public class ShoppingCartService {
             return;
         }
         shoppingCartItemRepository.deleteByUserIdAndCertificationId(userId, certificationId);
+    }
+
+    @Transactional
+    public boolean removeCartItem(Long userId, Long cartItemId) {
+        if (userId == null || cartItemId == null) {
+            return false;
+        }
+
+        Optional<ShoppingCartItem> cartItem = shoppingCartItemRepository.findByIdAndUserId(cartItemId, userId);
+        if (cartItem.isEmpty()) {
+            return false;
+        }
+
+        shoppingCartItemRepository.delete(cartItem.get());
+        return true;
     }
 
     @Transactional

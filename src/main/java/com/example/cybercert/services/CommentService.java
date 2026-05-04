@@ -1,5 +1,7 @@
 package com.example.cybercert.services;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.example.cybercert.models.Certification;
@@ -21,6 +23,10 @@ public class CommentService {
         return commentsRepository.findAll();
     }
 
+    public Page<Comment> findAll(Pageable pageable) {
+        return commentsRepository.findAll(pageable);
+    }
+
     public Optional<Comment> findById(Long id) {
         return commentsRepository.findById(id);
     }
@@ -35,6 +41,10 @@ public class CommentService {
 
     public List<Comment> getCommentsByCertification(Long certificationId) {
         return commentsRepository.findByCertificationIdOrderByCreatedAtDesc(certificationId);
+    }
+
+    public Page<Comment> getCommentsByCertification(Long certificationId, Pageable pageable) {
+        return commentsRepository.findByCertificationIdOrderByCreatedAtDesc(certificationId, pageable);
     }
 
     public Comment addComment(User user, Certification certification, String text, int rating) {
