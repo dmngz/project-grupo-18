@@ -5,6 +5,8 @@ import com.example.cybercert.models.Certification;
 import com.example.cybercert.services.CertificationService;
 import com.example.cybercert.dto.CertificationDTO;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -27,9 +29,10 @@ public class CertificationRestController {
     }
 
     @GetMapping("/")
-    public ResponseEntity<List<CertificationDTO>> getAllCertifications() {
-        List<Certification> certifications = certificationService.findAll();
-        return ResponseEntity.ok(certificationMapper.toDTOs(certifications));
+    public ResponseEntity<Page<CertificationDTO>> getAllCertifications(Pageable pageable) {
+        Page<Certification> certifications = certificationService.findAll(pageable);
+        Page<CertificationDTO> dtoPage = certifications.map(certificationMapper::toDTO);
+        return ResponseEntity.ok(dtoPage);
     }
 
     @GetMapping("/{id}")

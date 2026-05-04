@@ -15,6 +15,8 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
@@ -53,9 +55,10 @@ public class UsersRestController {
             @ApiResponse(responseCode = "200", description = "Listado de usuarios devuelto correctamente")
     })
     @GetMapping
-    public ResponseEntity<List<UserDTO>> getAllUsers() {
-        List<User> users = userService.findAll();
-        return ResponseEntity.ok(userMapper.toDTOs(users));
+    public ResponseEntity<Page<UserDTO>> getAllUsers(Pageable pageable) {
+        Page<User> users = userService.findAll(pageable);
+        Page<UserDTO> dtoPage = users.map(userMapper::toDTO);
+        return ResponseEntity.ok(dtoPage);
     }
 
     @Operation(summary = "Crear un usuario")
