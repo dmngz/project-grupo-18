@@ -33,8 +33,7 @@ public class CommentRestController {
         this.userService = userService;
         this.certificationService = certificationService;
     }
-
-    @GetMapping
+    
     @GetMapping
     public ResponseEntity<Page<CommentDTO>> getAllComments(
             @RequestParam(required = false) Long certificationId,

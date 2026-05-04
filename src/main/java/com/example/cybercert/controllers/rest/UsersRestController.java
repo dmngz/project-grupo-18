@@ -67,6 +67,11 @@ public class UsersRestController {
     })
     @PostMapping("/create")
     public ResponseEntity<FullUserDTO> createUser(@RequestBody FullUserDTO fullUserDTO) {
+
+        Long id = fullUserDTO.id();
+        if(userService.findById(id).isPresent()){
+            return ResponseEntity.badRequest().build();
+        }
         User user = userMapper.toEntity(fullUserDTO);
         User savedUser = userService.save(user);
         return ResponseEntity.ok(userMapper.toFullDTO(savedUser));
