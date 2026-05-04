@@ -51,13 +51,13 @@
                 class="btn btn-outline nav-btn position-relative"
               >
                 <i class="fa-solid fa-cart-shopping"></i>
-                {{#hasCartItems}}
+                {{#cartCount}}
                 <span
                   class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
                 >
-                  {{cartSize}}
+                  {{cartCount}}
                 </span>
-                {{/hasCartItems}}
+                {{/cartCount}}
               </a>
               {{/logged}} {{^logged}}
               <a href="/login" class="btn btn-outline nav-btn">

@@ -48,6 +48,9 @@ public class Certification {
     @OneToMany(mappedBy = "certification", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Comment> comments;;
 
+    @Column(nullable = false)
+    private Double price;
+
     public Certification() {
     }
 
@@ -151,6 +154,31 @@ public class Certification {
 
     public void setComments(List<Comment> comments) {
         this.comments = comments;
+    }
+
+    public Double getPrice() {
+        return price;
+    }
+
+    public void setPrice(Double price) {
+        this.price = price;
+    }
+
+    public String getFormattedPrice() {
+        return price != null ? String.format("%.2f", price) : "0.00";
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Certification)) return false;
+        Certification that = (Certification) o;
+        return id != null && id.equals(that.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return id != null ? id.hashCode() : 0;
     }
 
 }
