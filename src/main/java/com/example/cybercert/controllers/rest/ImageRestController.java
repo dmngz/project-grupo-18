@@ -1,4 +1,4 @@
-package com.example.cybercert.Controllers.rest;
+package com.example.cybercert.controllers.rest;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.example.cybercert.Services.ImageService;
+import com.example.cybercert.services.ImageService;
 import com.example.cybercert.dto.ImageDTO;
 import com.example.cybercert.dto.ImageMapper;
 import org.springframework.web.bind.annotation.GetMapping;

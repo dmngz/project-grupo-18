@@ -60,6 +60,43 @@ public class CertificationService {
         return certificationRepository.save(certification);
     }
 
+    @Transactional
+    public Certification updateCertification(Long id, Certification updatedCertification) {
+        Certification existingCertification = certificationRepository.findById(id)
+                .orElseThrow();
+
+        updatedCertification.setId(id);
+        if (existingCertification.getImage() != null) {
+            updatedCertification.setImage(existingCertification.getImage());
+        }
+
+        if (updatedCertification.getComments() == null) {
+            updatedCertification.setComments(existingCertification.getComments());
+        } else {
+            updatedCertification.getComments().forEach(comment -> comment.setCertification(updatedCertification));
+        }
+
+        certificationRepository.save(updatedCertification);
+
+        return updatedCertification;
+    }
+
+    public Certification addImageTocertification(long id, Image image) {
+        Certification certification = certificationRepository.findById(id).orElseThrow();
+        certification.setImage(image);
+        certificationRepository.save(certification);
+
+        return certification;
+    }
+
+    public Certification removeImageFromBook(long id) {
+        Certification certification = certificationRepository.findById(id).orElseThrow();
+        certification.setImage(null);
+        certificationRepository.save(certification);
+
+        return certification;
+    }
+
     public int count() {
         return (int) certificationRepository.count();
     }
